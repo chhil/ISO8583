@@ -18,8 +18,6 @@ public class BitmapMessage<T> {
         unpack(0, bytesIn, fields);
     }
 
-
-
     public byte[] pack() {
 
         byte[] packed = new byte[0];
@@ -40,7 +38,7 @@ public class BitmapMessage<T> {
                 }
                 if (field.getDataPackager() instanceof BitmapPackager) {
                     BitmapPackager pkgr = (BitmapPackager) field.getDataPackager();
-                    packed = Utils.concat(packed, pkgr.pack(field.fields));
+                    packed = Utils.concat(packed, pkgr.pack(field.fields, pkgr.length));
 
                 }
 

@@ -204,16 +204,10 @@ public class BitmapPackager extends DataPackager<String> {
         return null;
     }
 
-    /**
-     * All the field that were set in the object are now packed i.e. converted
-     * to bytes using the type of packager (length and data ) for each field.
-     * 
-     * @param fields
-     * @return
-     */
-    public byte[] pack(List<Field> fields) {
+
+    public byte[] pack(List<Field> fields, int bitmapSize) {
         this.fields = fields;
-        bitmap = new BitSet();
+        bitmap = new BitSet(bitmapSize * 8);
 
         byte[] packed = new byte[0];
         int dataElement = 0;
@@ -223,9 +217,19 @@ public class BitmapPackager extends DataPackager<String> {
 
                 byte[] packedBytes = f.getDataPackager().pack(f.getValue());
                 if (f.getLengthPackager() != null) {
-                    bitmap.set(dataElement);
-                    packed = Utils.concat(packed, f.getLengthPackager().pack(String.valueOf((packedBytes.length))),
-                            packedBytes);
+                    if (f.getDataPackager() instanceof BitmapPackager) {
+                        BitmapPackager pkgr = (BitmapPackager) f.getDataPackager();
+                        bitmap.set(dataElement);
+                        byte[] bitmapPacked = pkgr.pack(f.fields, pkgr.length);
+                        packed = Utils.concat(packed, bitmapPacked);
+                        packed = f.getLengthPackager().pack(String.valueOf(bitmapPacked.length));
+
+                    }
+                    else {
+                        bitmap.set(dataElement);
+                        packed = Utils.concat(packed, f.getLengthPackager().pack(String.valueOf((packedBytes.length))),
+                                packedBytes);
+                    }
                 }
                 else if (f.getDataPackager() != null && !(f.getDataPackager() instanceof BitmapPackager)) {
                     bitmap.set(dataElement);
@@ -235,7 +239,7 @@ public class BitmapPackager extends DataPackager<String> {
             }
             if (f.getDataPackager() instanceof BitmapPackager) {
                 BitmapPackager pkgr = (BitmapPackager) f.getDataPackager();
-                packed = Utils.concat(packed, pkgr.pack(f.fields));
+                packed = Utils.concat(packed, pkgr.pack(f.fields, pkgr.length));
 
             }
 
@@ -243,7 +247,13 @@ public class BitmapPackager extends DataPackager<String> {
 
         }
 
-        packed = Utils.concat(Utils.toByteArray(bitmap), packed);
+        System.out.println(bitmap.length());
+        byte[] p = Utils.toByteArray(bitmap);
+        byte[] q = new byte[bitmapSize];
+        for (int i = 0; i < bitmapSize; i++)
+            q[i] = p[i];
+
+        packed = Utils.concat(q, packed);
         return packed;
 
     }

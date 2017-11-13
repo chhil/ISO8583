@@ -443,7 +443,7 @@ public class BitmapMessageTest {
 
 
         String bitmapField2 = "F0000000";
-        String field2 = "F0F0F0F9" + bitmapField2 + "F0F1F2F3";
+        String field2 = "F0F0F0F8" + bitmapField2 + "F0F1F2F3";
         String bitmap = "783407424640C014";
 
         String bytesInHex = "F1F1F2F0" + bitmap + field2
@@ -486,5 +486,11 @@ public class BitmapMessageTest {
         //@formatter:on
         assertEquals(expected, msg.describe());
 
+        byte[] packed = msg.pack();
+        System.out.println(Utils.bytesToHex(packed));
+
+        assertEquals(bytesInHex, Utils.bytesToHex(packed));
+
+        System.out.println(msg.describe());
     }
 }
