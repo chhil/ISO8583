@@ -48,10 +48,12 @@ public class BitmapPackager extends DataPackager<String> {
         }
         str.append("]").append(String.format("%n"));
 
-        for (Field f : fields) {
-            if (f.getValue() != null)
-                str.append(String.format("[%10s] : %s", f.getName(), f.getDataPackager().describe()))
-                        .append(String.format("%n"));
+        if (fields != null) {
+            for (Field f : fields) {
+                if (f.getValue() != null)
+                    str.append(String.format("[%10s] : %s", f.getName(), f.getDataPackager().describe()))
+                            .append(String.format("%n"));
+            }
         }
 
         return str.toString();
