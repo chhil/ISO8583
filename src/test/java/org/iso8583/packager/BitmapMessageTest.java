@@ -117,7 +117,7 @@ public class BitmapMessageTest {
         // DataPackager.EBCDIC));
 
         String describeExpected = "[         0] : [1120]\r\n" + 
-                "[Bitmap    ] : [783407424640c014]\r\n" + 
+                "[Bitmap    ] : [783407424640C014]\r\n" + 
                 "[Bitmap    ] : [2 3 4 5 11 12 14 22 23 24 26 31 34 38 39 42 49 50 60 62 ]\r\n" + 
                 "[         2] : [374754051549002]\r\n" + 
                 "[         3] : [394800]\r\n" + 
