@@ -3,6 +3,8 @@ package org.iso8583.util;
 import java.nio.charset.Charset;
 import java.util.BitSet;
 
+import org.iso8583.packager.DataPackager;
+
 public class Utils {
 
     /**
@@ -1005,6 +1007,14 @@ public class Utils {
         }
 
         return builder.toString();
+    }
+
+    public static String hexDump(byte[] bytes) {
+        return hexDump(bytes, 0, bytes.length, DataPackager.ASCII);
+    }
+
+    public static String hexDump(byte[] bytes, Charset charSet) {
+        return hexDump(bytes, 0, bytes.length, charSet);
     }
 
     public static byte[] hexStringToByteArray(String s) {
