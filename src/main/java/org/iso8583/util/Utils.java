@@ -1067,4 +1067,40 @@ public class Utils {
         }
         return new String(hexChars);
     }
+
+    public static String protect(String s) {
+        StringBuilder sb = new StringBuilder();
+        int len = s.length();
+        int clear = len > 6 ? 6 : 0;
+        int lastFourIndex = -1;
+        if (clear > 0) {
+            lastFourIndex = s.indexOf('=') - 4;
+            if (lastFourIndex < 0)
+                lastFourIndex = s.indexOf('^') - 4;
+            if (lastFourIndex < 0 && s.indexOf('^') < 0)
+                lastFourIndex = s.indexOf('D') - 4;
+            if (lastFourIndex < 0)
+                lastFourIndex = len - 4;
+        }
+        for (int i = 0; i < len; i++) {
+            if (s.charAt(i) == '=' || s.charAt(i) == 'D' && s.indexOf('^') < 0)
+                clear = 1; // use clear=5 to keep the expiration date
+            else if (s.charAt(i) == '^') {
+                lastFourIndex = 0;
+                clear = len - i;
+            }
+            else if (i == lastFourIndex)
+                clear = 4;
+            sb.append(clear-- > 0 ? s.charAt(i) : '_');
+        }
+        s = sb.toString();
+
+        // Addresses Track1 Truncation
+        int charCount = s.replaceAll("[^\\^]", "").length();
+        if (charCount == 2) {
+            s = s.substring(0, s.lastIndexOf("^") + 1);
+            s = Utils.rightPad(s, len, '_');
+        }
+        return s;
+    }
 }

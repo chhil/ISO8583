@@ -1,5 +1,6 @@
 package org.iso8583.packager;
 
+import org.iso8583.util.Compliance;
 import org.iso8583.util.Utils;
 
 public class BinaryDataPackager extends DataPackager<String> {
@@ -17,15 +18,18 @@ public class BinaryDataPackager extends DataPackager<String> {
     }
 
     public BinaryDataPackager() {
-        // TODO Auto-generated constructor stub
+
+    }
+
+    public BinaryDataPackager(Compliance<String> compliance) {
+        super(compliance);
     }
 
     @Override
     public String describe() {
 
-        return "[" + get() + "]";
+        return "[" + getCompliance().makeCompliant(get()) + "]";
     }
-
     @Override
     public int unpack(int offset, byte[] bytes) throws Exception {
 

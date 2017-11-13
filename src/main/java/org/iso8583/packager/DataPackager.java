@@ -4,8 +4,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.iso8583.util.Compliance;
+import org.iso8583.util.ComplianceNone;
+
 public abstract class DataPackager<T> implements IMessage {
 
+    private Compliance<T>       compliance = (Compliance<T>) new ComplianceNone();
     public static final Charset ASCII  = StandardCharsets.ISO_8859_1;
     public static final Charset EBCDIC = Charset.forName("IBM1047");
     private T                   interprettedData;
@@ -29,10 +33,19 @@ public abstract class DataPackager<T> implements IMessage {
     protected String rawData;
     protected int    length;
 
-    public DataPackager() {
+    public DataPackager(int length, Compliance c) {
+        this.length = length;
+        this.compliance = c;
     }
     public DataPackager(int length) {
         this.length = length;
+    }
+
+    public DataPackager(Compliance<T> compliance) {
+        this.compliance = compliance;
+    }
+
+    public DataPackager() {
     }
 
     public abstract String describe();
@@ -63,5 +76,13 @@ public abstract class DataPackager<T> implements IMessage {
     public abstract byte[] pack(T value);
 
     public abstract byte[] pack();
+
+    public Compliance getCompliance() {
+        return compliance;
+    }
+
+    public void setCompliance(Compliance compliance) {
+        this.compliance = compliance;
+    }
 
 }

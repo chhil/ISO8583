@@ -1,5 +1,6 @@
 package org.iso8583.packager;
 
+import org.iso8583.util.Compliance;
 import org.iso8583.util.Utils;
 
 public class BCDDataPackager extends DataPackager<String> {
@@ -16,10 +17,14 @@ public class BCDDataPackager extends DataPackager<String> {
 
     }
 
+    public BCDDataPackager(Compliance<String> compliance) {
+        super(compliance);
+    }
+
     @Override
     public String describe() {
 
-        return "[" + rawData + "]";
+        return "[" + getCompliance().makeCompliant(rawData) + "]";
     }
 
     @Override

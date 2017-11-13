@@ -2,6 +2,8 @@ package org.iso8583.packager;
 
 import java.nio.ByteBuffer;
 
+import org.iso8583.util.Compliance;
+
 public class EbcdicDataPackager extends DataPackager<String> {
 
     private Padding ignoreNibble = Padding.IgnoreRightmostPadNibble;
@@ -20,10 +22,14 @@ public class EbcdicDataPackager extends DataPackager<String> {
 
     }
 
+    public EbcdicDataPackager(Compliance<String> compliance) {
+        super(compliance);
+    }
+
     @Override
     public String describe() {
 
-        return "[" + get() + "]";
+        return "[" + getCompliance().makeCompliant(get()) + "]";
     }
 
     @Override

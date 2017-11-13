@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iso8583.util.ComplianceProtect;
 import org.iso8583.util.Utils;
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public class BitmapMessageTest {
             {
                 add(new Field<String>("0", new NOPDataPackager(0)));
                 add(new Field<String>("1", new NOPDataPackager(0)));
-                add(new Field<String>("2", new EbcdicLengthPackager(2), new EbcdicDataPackager()));
+                add(new Field<String>("2", new EbcdicLengthPackager(2), new EbcdicDataPackager(new ComplianceProtect())));
                 add(new Field<String>("3", new EbcdicDataPackager(6)));
                 add(new Field<String>("4", new EbcdicDataPackager(12)));
                 add(new Field<String>("5", new EbcdicDataPackager(12)));
@@ -118,7 +119,7 @@ public class BitmapMessageTest {
 
         String describeExpected = "[         0] : [1120]\r\n" + "[Bitmap Hex] : [783407424640C014]\r\n"
                 + "[Bitmap Bit] : [2 3 4 5 11 12 14 22 23 24 26 31 34 38 39 42 49 50 60 62 ]\r\n"
-                + "[         2] : [374754051549002]\r\n" + "[         3] : [394800]\r\n"
+                + "[         2] : [374754_____9002]\r\n" + "[         3] : [394800]\r\n"
                 + "[         4] : [000000000000]\r\n" + "[         5] : [000000000000]\r\n"
                 + "[        11] : [000018]\r\n" + "[        12] : [171108105553]\r\n" + "[        14] : [0312]\r\n"
                 + "[        22] : [000S41600001]\r\n" + "[        23] : [001]\r\n" + "[        24] : [100]\r\n"

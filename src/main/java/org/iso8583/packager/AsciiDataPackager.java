@@ -1,19 +1,27 @@
 package org.iso8583.packager;
 
+import org.iso8583.util.Compliance;
+
 public class AsciiDataPackager extends DataPackager<String> {
 
     public AsciiDataPackager(int length) {
         super(length);
     }
 
+    public AsciiDataPackager(int length, Compliance<String> compliance) {
+        super(length, compliance);
+    }
     public AsciiDataPackager() {
-        // TODO Auto-generated constructor stub
+    }
+
+    public AsciiDataPackager(Compliance<String> compliance) {
+        super(compliance);
     }
 
     @Override
     public String describe() {
 
-        return "[" + rawData + "]";
+        return "[" + getCompliance().makeCompliant(rawData) + "]";
     }
 
     @Override
