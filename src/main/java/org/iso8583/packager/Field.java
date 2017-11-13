@@ -34,6 +34,12 @@ public class Field<T> {
         this.fields = fields;
     }
 
+    public Field(String name, LengthPackager lengthPackager, DataPackager<T> dataPackager, List<Field<T>> fields) {
+        this.setLengthPackager(lengthPackager);
+        this.setDataPackager(dataPackager);
+        this.setName(name);
+        this.fields = fields;
+    }
 
     public LengthPackager getLengthPackager() {
         return lengthPackager;

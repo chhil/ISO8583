@@ -68,7 +68,7 @@ public abstract class DataPackager<T> implements IMessage {
         this.interprettedData = interprettedData;
     }
 
-    public int unpack(int offset, byte[] bytes, List<Field> fieldFormatter) throws Exception {
+    public int unpack(int offset, byte[] bytes, List<Field> fieldFormatter, boolean msbExtension) throws Exception {
         // TODO Auto-generated method stub
         return 0;
     }

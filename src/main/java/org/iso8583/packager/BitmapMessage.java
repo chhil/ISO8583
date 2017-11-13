@@ -103,7 +103,7 @@ public class BitmapMessage<T> {
             }
             if (field.getDataPackager() instanceof BitmapPackager) {
                 BitmapPackager pkgr = (BitmapPackager) field.getDataPackager();
-                pkgr.unpack(offset, bytesIn, field.fields);
+                pkgr.unpack(offset, bytesIn, field.fields, pkgr.isMsbBitmapExtension());
 
             }
         }
