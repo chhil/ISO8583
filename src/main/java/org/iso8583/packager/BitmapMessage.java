@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.iso8583.util.Utils;
 
-public class BitmapMessage {
+public class BitmapMessage<T> {
 
-    List<Field> fields = new ArrayList<Field>();
+    List<Field<T>> fields = new ArrayList<Field<T>>();
 
-    public BitmapMessage(List<Field> fields) {
+    public BitmapMessage(List<Field<T>> fields) {
         this.fields = fields;
     }
 
@@ -52,38 +52,38 @@ public class BitmapMessage {
 
     }
 
-    public void set(String dataElement, String value) {
+    public void set(String dataElement, T value) {
 
         int de = Integer.parseInt(dataElement);
-        Field f = fields.get(1).fields.get(de);
+        Field<T> f = fields.get(1).fields.get(de);
         f.setValue(value);
 
     }
 
-    public void setMTI(String value) {
+    public void setMTI(T value) {
 
         fields.get(0).setValue(value);
 
     }
 
-    public String getMTI() {
+    public T getMTI() {
 
         return fields.get(0).getValue();
 
     }
 
-    public String get(String dataElement) {
+    public T get(String dataElement) {
 
         int de = Integer.parseInt(dataElement);
         if (de == 0) {
             return fields.get(0).getValue();
         }
-        Field f = fields.get(1).fields.get(de);
+        Field<T> f = fields.get(1).fields.get(de);
         return f.getValue();
 
     }
 
-    private int unpack(int offset, byte[] bytesIn, List<Field> subfields) throws Exception {
+    private int unpack(int offset, byte[] bytesIn, List<Field<T>> subfields) throws Exception {
         for (Field field : subfields) {
 
             if (field.getLengthPackager() != null) {

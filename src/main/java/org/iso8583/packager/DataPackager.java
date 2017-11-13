@@ -4,11 +4,11 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public abstract class DataPackager implements IMessage {
+public abstract class DataPackager<T> implements IMessage {
 
     public static final Charset ASCII  = StandardCharsets.ISO_8859_1;
     public static final Charset EBCDIC = Charset.forName("IBM1047");
-    private String              interprettedData;
+    private T                   interprettedData;
     private byte[]              rawDataBytes;
     protected String getRawData() {
         return rawData;
@@ -47,11 +47,11 @@ public abstract class DataPackager implements IMessage {
         this.length = length;
     }
 
-    public String get() {
+    public T get() {
         return interprettedData;
     }
 
-    public void set(String interprettedData) {
+    public void set(T interprettedData) {
         this.interprettedData = interprettedData;
     }
 
@@ -60,7 +60,7 @@ public abstract class DataPackager implements IMessage {
         return 0;
     }
 
-    public abstract byte[] pack(String value);
+    public abstract byte[] pack(T value);
 
     public abstract byte[] pack();
 

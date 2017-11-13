@@ -4,15 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Field {
+public class Field<T> {
     
     private LengthPackager lengthPackager;
-    private DataPackager   dataPackager;
+    private DataPackager<T> dataPackager;
     private String         name;
-    private String         value;
-    private Map<String, String> map = new HashMap();
+    private T               value;
+    private Map<String, T>  map = new HashMap();
 
-    List<Field>            fields;
+    List<Field<T>>          fields;
 
     public Field(String name, LengthPackager lengthPackager, DataPackager dataPackager) {
         this.setName(name);
@@ -27,7 +27,7 @@ public class Field {
         this.setName(name);
     }
 
-    public Field(String name, DataPackager dataPackager, List<Field> fields) {
+    public Field(String name, DataPackager<T> dataPackager, List<Field<T>> fields) {
 
         this.setDataPackager(dataPackager);
         this.setName(name);
@@ -60,13 +60,18 @@ public class Field {
         map.put(name, null);
     }
 
-    public String getValue() {
+    public T getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(T value) {
         this.value = value;
         map.put(name, value);
+    }
+
+    public void setValue(Map value) {
+        map = value;
+
     }
 
     public String describe() {

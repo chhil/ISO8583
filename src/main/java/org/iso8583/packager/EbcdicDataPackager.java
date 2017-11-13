@@ -2,7 +2,7 @@ package org.iso8583.packager;
 
 import java.nio.ByteBuffer;
 
-public class EbcdicDataPackager extends DataPackager {
+public class EbcdicDataPackager extends DataPackager<String> {
 
     private Padding ignoreNibble = Padding.IgnoreRightmostPadNibble;
 

@@ -2,7 +2,7 @@ package org.iso8583.packager;
 
 import org.iso8583.util.Utils;
 
-public class BCDDataPackager extends DataPackager {
+public class BCDDataPackager extends DataPackager<String> {
 
     private Padding ignoreNibble = Padding.IgnoreRightmostPadNibble;
 

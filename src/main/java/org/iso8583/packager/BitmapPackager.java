@@ -4,9 +4,8 @@ import java.util.BitSet;
 import java.util.List;
 
 import org.iso8583.util.Utils;
-import org.jpos.iso.ISOUtil;
 
-public class BitmapPackager extends DataPackager {
+public class BitmapPackager extends DataPackager<String> {
     BitSet bitmap;
 
     protected BitSet getBitmap() {
@@ -37,9 +36,9 @@ public class BitmapPackager extends DataPackager {
     public String describe() {
 
         StringBuilder str = new StringBuilder();
-        str.append("[Bitmap    ] : [").append(ISOUtil.byte2hex(Utils.toByteArray(bitmap))).append("]")
+        str.append("[Bitmap Hex] : [").append(Utils.bytesToHex(Utils.toByteArray(bitmap))).append("]")
                 .append(String.format("%n"));
-        str.append("[Bitmap    ] : [");
+        str.append("[Bitmap Bit] : [");
 
         for (int i = 0; i < bitmap.length(); i++) {
             if (bitmap.get(i)) {
@@ -51,7 +50,8 @@ public class BitmapPackager extends DataPackager {
 
         for (Field f : fields) {
             if (f.getValue() != null)
-                str.append(String.format("[%10s] : [%s]", f.getName(), f.getValue())).append(String.format("%n"));
+                str.append(String.format("[%10s] : %s", f.getName(), f.getDataPackager().describe()))
+                        .append(String.format("%n"));
         }
 
         return str.toString();
@@ -158,7 +158,7 @@ public class BitmapPackager extends DataPackager {
      * @return
      */
     public byte[] pack(List<Field> fields) {
-
+        this.fields = fields;
         bitmap = new BitSet();
 
         byte[] packed = new byte[0];

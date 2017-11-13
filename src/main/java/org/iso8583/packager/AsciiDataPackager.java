@@ -1,6 +1,6 @@
 package org.iso8583.packager;
 
-public class AsciiDataPackager extends DataPackager {
+public class AsciiDataPackager extends DataPackager<String> {
 
     public AsciiDataPackager(int length) {
         super(length);
@@ -27,6 +27,7 @@ public class AsciiDataPackager extends DataPackager {
                 data[k++] = bytes[i];
             }
             setRawData(new String(data, DataPackager.ASCII));
+            set(new String(data, DataPackager.ASCII));
         }
         else
             throw new Exception(String.format("Need to read %d bytes from offset %d, but total bytes available is %d.",

@@ -60,13 +60,13 @@ public class AsciiLengthPackager extends LengthPackager {
 
     @Override
     public byte[] pack(String length) {
-        return null;
+        return Utils.leftPad(length, lengthOfLength, '0').getBytes(DataPackager.ASCII);
     }
 
     @Override
     public byte[] pack(byte[] lengthBytes) throws Exception {
-
-        return null;
+        return Utils.leftPad(new String(lengthBytes, DataPackager.ASCII), lengthOfLength, '0')
+                .getBytes(DataPackager.ASCII);
     }
 
 }

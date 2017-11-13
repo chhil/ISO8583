@@ -1,6 +1,6 @@
 package org.iso8583.packager;
 
-public class NOPDataPackager extends DataPackager {
+public class NOPDataPackager extends DataPackager<String> {
 
 
     public NOPDataPackager(int length) {
