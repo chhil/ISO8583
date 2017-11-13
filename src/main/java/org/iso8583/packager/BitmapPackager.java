@@ -44,7 +44,6 @@ public class BitmapPackager extends DataPackager<String> {
             if (bitmap.get(i)) {
                 str.append(i).append(" ");
             }
-
         }
         str.append("]").append(String.format("%n"));
 
@@ -107,8 +106,8 @@ public class BitmapPackager extends DataPackager<String> {
             if ((bytes[offset] >> 7 & 1) == 1) {
                 bitmap = new BitSet(128);
                 length = 16;
-                if ((offset + 64) <= bytes.length) {
-                    if ((bytes[offset + 64] >> 7 & 1) == 1) {
+                if ((offset + length) <= bytes.length) {
+                    if ((bytes[offset + 8] >> 7 & 1) == 1) {
                         length = 24;
                         bitmap = new BitSet(192);
                     }

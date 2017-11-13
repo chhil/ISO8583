@@ -51,5 +51,12 @@ public class BitmapPackagerTest {
         assertEquals("[Bitmap Hex] : [7F00000000000000]" + String.format("%n") + "[Bitmap Bit] : [2 3 4 5 6 7 8 ]"
                 + String.format("%n"), pkgr.describe());
 
+        pkgr.unpack(0,
+                new byte[] { (byte) 0b11111111, (byte) 0b11111111, (byte) 0b11111111, (byte) 0b11111111,
+                        (byte) 0b11111111, (byte) 0b11111111, (byte) 0b11111111, (byte) 0b11111111, (byte) 0b01111111,
+                        (byte) 0b11111111, (byte) 0b11111111, (byte) 0b11111111, (byte) 0b11111111, (byte) 0b11111111,
+                        (byte) 0b11111111, (byte) 0b11111111 });
+
+        System.out.println(pkgr.describe());
     }
 }
