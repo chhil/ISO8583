@@ -17,7 +17,7 @@ public class GenericTLVDataPackagerTest {
         p.setLength(data.length());
         p.unpack(0, data.getBytes());
 
-        System.out.println(Utils.hexDump(p.pack()));
+        System.out.println(p.describe());
 
         HashMap<String, String> h = new HashMap<String, String>() {
             {

@@ -33,13 +33,18 @@ public class GenericTLVDataPackager extends DataPackager<Map<String, String>> {
     public String describe() {
         Map<String, String> map = get();
         StringBuilder builder = new StringBuilder();
+        builder.append(String.format("%n"));
+        builder.append(String.format("%17s[%-5s][%-6s][%s]", "", "tag", "length", "value")).append(String.format("%n"));
+
         for (Entry<String, String> entry : map.entrySet()) {
             builder.append(
-                    String.format("{[%s][%s][%s]}", entry.getKey(), entry.getValue().length(), entry.getValue()));
+                    String.format("%17s[%-5s][%-6s][%s]", "", entry.getKey(), entry.getValue().length(),
+                            entry.getValue()))
+                    .append(String.format("%n"));
 
         }
 
-        return "[" + builder.toString() + "]";
+        return "[" + builder.toString() + String.format("%16s", "]");
     }
 
     @Override
@@ -53,16 +58,18 @@ public class GenericTLVDataPackager extends DataPackager<Map<String, String>> {
                 offset = getDataLengthPackager().unpack(offset, bytes);
                 getValuePackager().setLength(getDataLengthPackager().getDataLength());
                 offset = getValuePackager().unpack(offset, bytes);
-                System.out.println(String.format("Tag %s Length %d value %s", getTagPackager().get(),
-                        getDataLengthPackager().getDataLength(), getValuePackager().get()));
+                // System.out.println(String.format("Tag %s Length %d value %s",
+                // getTagPackager().get(),
+                // getDataLengthPackager().getDataLength(),
+                // getValuePackager().get()));
                 getTagValueMap().put(getTagPackager().get(), getValuePackager().get());
-            }
 
+            }
+            set(getTagValueMap());
         }
         else
             throw new Exception(String.format("Need to read %d bytes from offset %d, but total bytes available is %d.",
                     length, offset, length - bytes.length));
-        set(getTagValueMap());
         return offset + length;
     }
 

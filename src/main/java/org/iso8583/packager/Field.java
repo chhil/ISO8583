@@ -41,6 +41,16 @@ public class Field<T> {
         this.fields = fields;
     }
 
+    public Field(String name, BitmapPackager bitmapPackager, List<Field<T>> subfields) {
+
+        this.setLengthPackager(lengthPackager);
+        this.setDataPackager(bitmapPackager);
+        this.setName(name);
+        this.fields = subfields;
+        // TODO Auto-generated constructor stub
+    }
+
+
     public LengthPackager getLengthPackager() {
         return lengthPackager;
     }

@@ -76,7 +76,12 @@ public class BitmapMessage<T> {
         if (de == 0) {
             return fields.get(0).getValue();
         }
+        if (de == 1) {
+            return fields.get(1).getValue();
+        }
         Field<T> f = fields.get(1).fields.get(de);
+
+
         return f.getValue();
 
     }
@@ -91,6 +96,7 @@ public class BitmapMessage<T> {
                     offset = field.getDataPackager().unpack(offset, bytesIn);
                     field.setValue(field.getDataPackager().get());
 
+
                 }
             }
             else {
@@ -102,6 +108,7 @@ public class BitmapMessage<T> {
             if (field.getDataPackager() instanceof BitmapPackager) {
                 BitmapPackager pkgr = (BitmapPackager) field.getDataPackager();
                 pkgr.unpack(offset, bytesIn, field.fields, pkgr.isMsbBitmapExtension());
+                field.setValue(field.getDataPackager().get());
 
             }
         }

@@ -1,13 +1,16 @@
 package org.iso8583.packager;
 
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.iso8583.util.Utils;
 
-public class BitmapPackager extends DataPackager<String> {
+public class BitmapPackager extends DataPackager<Map<String, String>> {
     BitSet bitmap;
 
+    Map<String, String> m = new HashMap<>();
     protected BitSet getBitmap() {
         return bitmap;
     }
@@ -75,6 +78,7 @@ public class BitmapPackager extends DataPackager<String> {
                             f.getDataPackager().setLength(f.getLengthPackager().getDataLength());
                             offset = f.getDataPackager().unpack(offset, bytesIn);
                             f.setValue(f.getDataPackager().get());
+                            m.put(String.valueOf(i), (String) f.getDataPackager().get());
                         }
                         else {
                             BitmapPackager pkgr = (BitmapPackager) f.getDataPackager();
@@ -84,6 +88,10 @@ public class BitmapPackager extends DataPackager<String> {
                             // f.getDataPackager().setLength(f.getLengthPackager().getDataLength());
                             offset = f.getDataPackager().unpack(offset, bytesIn, f.fields, pkgr.isMsbBitmapExtension());
                             f.setValue(f.getDataPackager().get());
+                            // m.put(String.valueOf(i), (String)
+                            // f.getDataPackager().get());
+
+                            f.getDataPackager().get();
                         }
 
                     }
@@ -92,6 +100,7 @@ public class BitmapPackager extends DataPackager<String> {
                     if (f.getDataPackager() != null) {
                         offset = f.getDataPackager().unpack(offset, bytesIn);
                         f.setValue(f.getDataPackager().get());
+                        m.put(String.valueOf(i), (String) f.getDataPackager().get());
                     }
                 }
                 if (f.getLengthPackager() == null && f.getDataPackager() instanceof BitmapPackager) {
@@ -105,6 +114,7 @@ public class BitmapPackager extends DataPackager<String> {
 
         }
 
+        set(m);
         return offset;
 
     }
@@ -144,8 +154,9 @@ public class BitmapPackager extends DataPackager<String> {
 
             }
             // System.out.print("\r\n");
+            m.put("0", l.toString().toUpperCase());
 
-            set(l.toString().toUpperCase());
+            // set(l.toString().toUpperCase());
         }
 
         return offset + length;
@@ -186,17 +197,12 @@ public class BitmapPackager extends DataPackager<String> {
             }
             // System.out.print("\r\n");
 
-            set(l.toString().toUpperCase());
+            m.put("0", l.toString().toUpperCase());
         }
 
         return offset + length;
     }
 
-    @Override
-    public byte[] pack(String value) {
-
-        return null;
-    }
 
     @Override
     public byte[] pack() {
@@ -264,6 +270,14 @@ public class BitmapPackager extends DataPackager<String> {
 
     public void setMsbBitmapExtension(boolean msbBitmapExtension) {
         this.msbBitmapExtension = msbBitmapExtension;
+    }
+
+
+
+    @Override
+    public byte[] pack(Map<String, String> value) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

@@ -157,10 +157,10 @@ public class BitmapMessageTest {
                 add(new Field<String>("128", new EbcdicDataPackager(8)));
             }
         };
-        final List<Field<String>> fields = new ArrayList<Field<String>>() {
+        final List<Field> fields = new ArrayList<Field>() {
             {
                 add(new Field<String>("0", new EbcdicDataPackager(4)));
-                add(new Field<String>("1", new BitmapPackager(8), subfields));
+                add(new Field("1", new BitmapPackager(8), subfields));
 
             }
         };
@@ -265,12 +265,25 @@ public class BitmapMessageTest {
         bm.set("2", h);
         byte[] x = bm.pack();
         Map s = (Map) bm.get("2");
+
+
         // System.out.println(Utils.hexDump(x));
         // System.out.println(bm.describe());
+
         //@formatter:on
-        String expected = "[         0] : [0100]\r\n" + "\r\n" + "[Bitmap Hex] : [4000000000000000]\r\n"
-                + "[Bitmap Bit] : [2 ]\r\n"
-                + "[         2] : [{[005][5][55555]}{[006][6][666666]}{[007][7][7777777]}]\r\n" + "\r\n";
+        String expected =
+                "[         0] : [0100]\r\n" + 
+                "\r\n" + 
+                "[Bitmap Hex] : [4000000000000000]\r\n" + 
+                "[Bitmap Bit] : [2 ]\r\n" + 
+                "[         2] : [\r\n" + 
+                "                 [tag  ][length][value]\r\n" + 
+                "                 [005  ][5     ][55555]\r\n" + 
+                "                 [006  ][6     ][666666]\r\n" + 
+                "                 [007  ][7     ][7777777]\r\n" + 
+                "               ]\r\n" + 
+                "\r\n"; 
+                
         //@formatter:off
         assertEquals(expected, bm.describe());
     }
@@ -283,7 +296,7 @@ public class BitmapMessageTest {
     @Test
     public void unpackPacktest003() throws Exception {
 
-        final List<Field<String>> field60DataElements = new ArrayList<Field<String>>() {
+        final List<Field<String>> field02DataElements = new ArrayList<Field<String>>() {
             {
                 add(new Field<String>("0", new NOPDataPackager(0)));
                 add(new Field<String>("1", new EbcdicDataPackager(1)));
@@ -294,12 +307,12 @@ public class BitmapMessageTest {
             }
         };
 
-        final List<Field<String>> subfields = new ArrayList<Field<String>>() {
+        final List<Field> subfields = new ArrayList<Field>() {
             {
                 add(new Field<String>("0", new NOPDataPackager(0)));
                 add(new Field<String>("1", new NOPDataPackager(0)));
-                add(new Field<String>("2", new EbcdicLengthPackager(4), new BitmapPackager(4, false),
-                        field60DataElements));
+                add(new Field("2", new EbcdicLengthPackager(4), new BitmapPackager(4, false),
+                        field02DataElements));
                 add(new Field<String>("3", new EbcdicDataPackager(6)));
                 add(new Field<String>("4", new EbcdicDataPackager(12)));
                 add(new Field<String>("5", new EbcdicDataPackager(12)));
@@ -429,10 +442,10 @@ public class BitmapMessageTest {
                 add(new Field<String>("128", new EbcdicDataPackager(8)));
             }
         };
-        final List<Field<String>> fields = new ArrayList<Field<String>>() {
+        final List<Field> fields = new ArrayList<Field>() {
             {
                 add(new Field<String>("0", new EbcdicDataPackager(4)));
-                add(new Field<String>("1", new BitmapPackager(8), subfields));
+                add(new Field("1", new BitmapPackager(8), subfields));
 
             }
         };
@@ -486,6 +499,13 @@ public class BitmapMessageTest {
         //@formatter:on
         assertEquals(expected, msg.describe());
 
+
+        System.out.println(msg.get("1"));
+        System.out.println(msg.get("2"));
+        assertEquals("0", ((Map<String, String>) msg.get("2")).get("1"));
+        assertEquals("1", ((Map<String, String>) msg.get("2")).get("2"));
+        assertEquals("2", ((Map<String, String>) msg.get("2")).get("3"));
+        assertEquals("3", ((Map<String, String>) msg.get("2")).get("4"));
         byte[] packed = msg.pack();
         System.out.println(Utils.bytesToHex(packed));
 
