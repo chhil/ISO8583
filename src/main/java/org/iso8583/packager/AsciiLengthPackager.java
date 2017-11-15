@@ -59,12 +59,24 @@ public class AsciiLengthPackager extends LengthPackager {
     }
 
     @Override
-    public byte[] pack(String length) {
+    public byte[] pack(String length) throws Exception {
+        if (length.length() > lengthOfLength) {
+
+            throw new Exception(String.format("Cannot pack %d wide length %s into %s packager.", length.length(),
+                    length,
+                    Utils.leftPad("L", lengthOfLength, "L")));
+        }
         return Utils.leftPad(length, lengthOfLength, '0').getBytes(DataPackager.ASCII);
     }
 
     @Override
     public byte[] pack(byte[] lengthBytes) throws Exception {
+        if (lengthBytes.length > lengthOfLength) {
+
+            throw new Exception(String.format("Cannot pack %d wide length %s into %s packager.", lengthBytes.length,
+                    new String(lengthBytes), Utils.leftPad("L", lengthOfLength, "L")));
+        }
+
         return Utils.leftPad(new String(lengthBytes, DataPackager.ASCII), lengthOfLength, '0')
                 .getBytes(DataPackager.ASCII);
     }

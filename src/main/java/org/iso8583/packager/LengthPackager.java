@@ -17,7 +17,7 @@ public abstract class LengthPackager implements IMessage {
 
     public abstract int unpack(int offset, byte[] bytesIn) throws Exception;
 
-    public abstract byte[] pack(String length);
+    public abstract byte[] pack(String length) throws Exception;
 
     public abstract byte[] pack(byte[] lengthBytes) throws Exception;
 

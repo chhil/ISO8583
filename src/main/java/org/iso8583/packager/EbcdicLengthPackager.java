@@ -62,7 +62,13 @@ public class EbcdicLengthPackager extends LengthPackager {
     }
 
     @Override
-    public byte[] pack(String length) {
+    public byte[] pack(String length) throws Exception {
+
+        if (length.length() > lengthOfLength) {
+
+            throw new Exception(String.format("Cannot pack %d wide length %s into %s packager.", length.length(),
+                    length, Utils.leftPad("L", lengthOfLength, "L")));
+        }
 
         setDataLength(Integer.parseInt(length));
         // e.g. conver say 123 to F0F1F3
@@ -72,7 +78,11 @@ public class EbcdicLengthPackager extends LengthPackager {
 
     @Override
     public byte[] pack(byte[] lengthBytes) throws Exception {
-        // TODO Auto-generated method stub
+        if (lengthBytes.length > lengthOfLength) {
+
+            throw new Exception(String.format("Cannot pack %d wide length %s into %s packager.", lengthBytes.length,
+                    new String(lengthBytes), Utils.leftPad("L", lengthOfLength, "L")));
+        }
 
         return EBCDIC.encode(new String(lengthBytes)).array();
     }

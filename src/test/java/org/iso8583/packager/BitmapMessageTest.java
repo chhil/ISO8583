@@ -9,9 +9,14 @@ import java.util.Map;
 
 import org.iso8583.util.ComplianceProtect;
 import org.iso8583.util.Utils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class BitmapMessageTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     /**
      * Unpack a byte stream, then pack it, should result in the same original
@@ -513,4 +518,45 @@ public class BitmapMessageTest {
 
         System.out.println(msg.describe());
     }
+
+    @Test
+    public void unpackPacktest3() throws Exception {
+        final List<Field> subfields = new ArrayList<Field>() {
+            {
+                add(new Field<String>("0", new NOPDataPackager(0)));
+                add(new Field<String>("1", new NOPDataPackager(0)));
+                add(new Field<Map<String, String>>("2", new AsciiLengthPackager(3), new GenericTLVDataPackager(
+                        new AsciiDataPackager(3), new AsciiLengthPackager(1), new AsciiDataPackager())));
+
+            }
+        };
+
+        final List<Field<String>> fields = new ArrayList<Field<String>>() {
+            {
+                add(new Field("0", new AsciiDataPackager(4)));
+                add(new Field("1", new BitmapPackager(8), subfields));
+
+            }
+        };
+
+        BitmapMessage bm = new BitmapMessage<>(fields);
+
+        HashMap<String, String> h = new HashMap<String, String>() {
+            {
+                put("005", "5");
+                put("006", "6");
+                put("007", "7777777777777777777777777777777777777777777777");
+            }
+        };
+
+        expectedException.expect(Exception.class);
+
+        bm.setMTI("0100");
+        bm.set("2", h);
+        byte[] x = bm.pack();
+
+        // System.out.println(bm.describe());
+
+    }
+
 }

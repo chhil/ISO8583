@@ -91,7 +91,7 @@ public class GenericTLVDataPackager extends DataPackager<Map<String, String>> {
     }
 
     @Override
-    public byte[] pack(Map<String, String> value) {
+    public byte[] pack(Map<String, String> value) throws Exception {
         set(value);
         // setRawData(value.getBytes(DataPackager.ASCII));
 
@@ -100,7 +100,7 @@ public class GenericTLVDataPackager extends DataPackager<Map<String, String>> {
     }
 
     @Override
-    public byte[] pack() {
+    public byte[] pack() throws Exception {
 
         Map<String, String> map = get();
         byte[] packed = new byte[0];

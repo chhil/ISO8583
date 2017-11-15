@@ -18,11 +18,12 @@ public class BitmapMessage<T> {
         unpack(0, bytesIn, fields);
     }
 
-    public byte[] pack() {
+    public byte[] pack() throws Exception {
 
         byte[] packed = new byte[0];
 
         for (Field field : fields) {
+            // try {
             if (field.getDataPackager() != null) {
                 if (field.getValue() != null) {
                     byte[] packedBytes = field.getDataPackager().pack(field.getValue());
@@ -44,6 +45,15 @@ public class BitmapMessage<T> {
 
             }
 
+            // }
+            // catch (Exception ex) {
+            // throw new Exception(String.format("Error at field %s having %s
+            // length packager and %s data packager.",
+            // field.getName(),
+            // field.getLengthPackager() != null ?
+            // field.getLengthPackager().describe() : "[none]",
+            // field.getDataPackager().describe()), ex);
+            // }
         }
 
         return packed;

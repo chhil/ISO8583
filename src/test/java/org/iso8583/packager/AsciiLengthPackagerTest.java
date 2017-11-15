@@ -61,4 +61,16 @@ public class AsciiLengthPackagerTest {
         assertEquals(12, pkgr.getDataLength());
 
     }
+
+    @Test
+    public void testPack005() throws Exception {
+        AsciiLengthPackager pkgr = new AsciiLengthPackager(2);
+
+
+        expectedException.expect(Exception.class);
+        expectedException.expectMessage("Cannot pack 3 wide length 100 into LL packager.");
+        pkgr.pack("100");
+        assertEquals(12, pkgr.getDataLength());
+
+    }
 }

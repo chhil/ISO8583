@@ -73,9 +73,9 @@ public abstract class DataPackager<T> implements IMessage {
         return 0;
     }
 
-    public abstract byte[] pack(T value);
+    public abstract byte[] pack(T value) throws Exception;
 
-    public abstract byte[] pack();
+    public abstract byte[] pack() throws Exception;
 
     public Compliance getCompliance() {
         return compliance;
