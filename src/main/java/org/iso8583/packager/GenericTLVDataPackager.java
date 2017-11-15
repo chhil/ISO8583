@@ -1,9 +1,11 @@
 package org.iso8583.packager;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
+import org.iso8583.util.Compliance;
+import org.iso8583.util.TLVComplianceNone;
 import org.iso8583.util.Utils;
 
 public class GenericTLVDataPackager extends DataPackager<Map<String, String>> {
@@ -11,21 +13,39 @@ public class GenericTLVDataPackager extends DataPackager<Map<String, String>> {
     private DataPackager<String>  tagPackager;
     private LengthPackager        dataLengthPackager;
     private DataPackager<String>  valuePackager;
-    protected Map<String, String> tagValueMap = new HashMap<String, String>();
+    protected Map<String, String> tagValueMap = new TreeMap<String, String>();
 
     public GenericTLVDataPackager(int length) {
         super(length);
     }
 
     public GenericTLVDataPackager() {
+        setCompliance(new TLVComplianceNone());
     }
 
+    public GenericTLVDataPackager(int length, Compliance<String> compliance) {
+        super(length, compliance);
+    }
+
+    public GenericTLVDataPackager(Compliance<Map<String, String>> compliance) {
+        super(compliance);
+    }
     public GenericTLVDataPackager(DataPackager<String> tagPackager, LengthPackager dataLengthPackager,
             DataPackager<String> valuePackager) {
 
         this.setTagPackager(tagPackager);
         this.setDataLengthPackager(dataLengthPackager);
         this.setValuePackager(valuePackager);
+        setCompliance(new TLVComplianceNone());
+    }
+
+    public GenericTLVDataPackager(DataPackager<String> tagPackager, LengthPackager dataLengthPackager,
+            DataPackager<String> valuePackager, Compliance<Map<String, String>> compliance) {
+
+        this.setTagPackager(tagPackager);
+        this.setDataLengthPackager(dataLengthPackager);
+        this.setValuePackager(valuePackager);
+        setCompliance(compliance);
 
     }
 
@@ -36,7 +56,8 @@ public class GenericTLVDataPackager extends DataPackager<Map<String, String>> {
         builder.append(String.format("%n"));
         builder.append(String.format("%17s[%-5s][%-6s][%s]", "", "tag", "length", "value")).append(String.format("%n"));
 
-        for (Entry<String, String> entry : map.entrySet()) {
+        Map<String, String> temp = (Map) getCompliance().makeCompliant(map);
+        for (Entry<String, String> entry : temp.entrySet()) {
             builder.append(
                     String.format("%17s[%-5s][%-6s][%s]", "", entry.getKey(), entry.getValue().length(),
                             entry.getValue()))
