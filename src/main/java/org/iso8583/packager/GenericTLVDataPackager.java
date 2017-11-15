@@ -58,10 +58,6 @@ public class GenericTLVDataPackager extends DataPackager<Map<String, String>> {
                 offset = getDataLengthPackager().unpack(offset, bytes);
                 getValuePackager().setLength(getDataLengthPackager().getDataLength());
                 offset = getValuePackager().unpack(offset, bytes);
-                // System.out.println(String.format("Tag %s Length %d value %s",
-                // getTagPackager().get(),
-                // getDataLengthPackager().getDataLength(),
-                // getValuePackager().get()));
                 getTagValueMap().put(getTagPackager().get(), getValuePackager().get());
 
             }
@@ -70,7 +66,7 @@ public class GenericTLVDataPackager extends DataPackager<Map<String, String>> {
         else
             throw new Exception(String.format("Need to read %d bytes from offset %d, but total bytes available is %d.",
                     length, offset, length - bytes.length));
-        return offset + length;
+        return offset;
     }
 
     @Override

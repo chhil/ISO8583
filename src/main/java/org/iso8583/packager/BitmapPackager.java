@@ -8,9 +8,9 @@ import java.util.Map;
 import org.iso8583.util.Utils;
 
 public class BitmapPackager extends DataPackager<Map<String, String>> {
-    BitSet bitmap;
+    protected BitSet    bitmap;
 
-    Map<String, String> m = new HashMap<>();
+    protected Map    m = new HashMap<>();
     protected BitSet getBitmap() {
         return bitmap;
     }
@@ -78,7 +78,7 @@ public class BitmapPackager extends DataPackager<Map<String, String>> {
                             f.getDataPackager().setLength(f.getLengthPackager().getDataLength());
                             offset = f.getDataPackager().unpack(offset, bytesIn);
                             f.setValue(f.getDataPackager().get());
-                            m.put(String.valueOf(i), (String) f.getDataPackager().get());
+                            m.put(String.valueOf(i), f.getDataPackager().get());
                         }
                         else {
                             BitmapPackager pkgr = (BitmapPackager) f.getDataPackager();
@@ -100,7 +100,7 @@ public class BitmapPackager extends DataPackager<Map<String, String>> {
                     if (f.getDataPackager() != null) {
                         offset = f.getDataPackager().unpack(offset, bytesIn);
                         f.setValue(f.getDataPackager().get());
-                        m.put(String.valueOf(i), (String) f.getDataPackager().get());
+                        m.put(String.valueOf(i), f.getDataPackager().get());
                     }
                 }
                 if (f.getLengthPackager() == null && f.getDataPackager() instanceof BitmapPackager) {
