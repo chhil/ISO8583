@@ -14,7 +14,7 @@ public class AsciiBitmapPackager extends BitmapPackager {
      * <pre>
      * 
      * hex (base16)    0x34, 0x32, 0x33, 0x34, 0x30, 0x31, 0x30, 0x31, 0x30, 0x38, 0x30, 0x30, 0x30, 0x30, 0x30, 0x43
-     * dec (base10)       4     2     3     4     0     1     0     1     0     8     0     0     0     0     0    12
+     * char               4     2     3     4     0     1     0     1     0     8     0     0     0     0     0     C
      * bin (base2)     0100  0010  0011  0100  0000  0001  0000  0001  0000  1000  0000  0000  0000  0000  0000  1100
      *                 |        |           |           |           |           |           |           |           |
      * pos             1        8          16          24          32          40          48          56          64  
@@ -90,6 +90,15 @@ public class AsciiBitmapPackager extends BitmapPackager {
         }
         m.put("0", l.toString().toUpperCase());
         return offset + length;
+    }
+
+
+
+    protected byte[] packBitmap(int bitmapSize) {
+
+        // todo MSB set to 1 if more than 64
+        byte[] p = Utils.toByteArray(bitmap);
+        return Utils.bytesToHex(p).getBytes();
     }
 
 }

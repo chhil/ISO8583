@@ -204,9 +204,9 @@ public class BitmapPackager extends DataPackager<Map<String, String>> {
     }
 
     @Override
-    public byte[] pack() {
+    public byte[] pack() throws Exception {
 
-        return null;
+        return pack(fields, getLength());
     }
 
     public byte[] pack(List<Field> fields, int bitmapSize) throws Exception {
@@ -216,56 +216,65 @@ public class BitmapPackager extends DataPackager<Map<String, String>> {
 
         byte[] packed = new byte[0];
         int dataElement = 0;
-        for (Field f : fields) {
-            try {
-                if (f.getValue() != null) {
+        if (fields != null) {
+            for (Field f : fields) {
+                try {
+                    if (f.getValue() != null) {
 
-                    byte[] packedBytes = f.getDataPackager().pack(f.getValue());
-                    if (f.getLengthPackager() != null) {
-                        if (f.getDataPackager() instanceof BitmapPackager) {
-                            BitmapPackager pkgr = (BitmapPackager) f.getDataPackager();
+                        byte[] packedBytes = f.getDataPackager().pack(f.getValue());
+                        if (f.getLengthPackager() != null) {
+                            if (f.getDataPackager() instanceof BitmapPackager) {
+                                BitmapPackager pkgr = (BitmapPackager) f.getDataPackager();
+                                bitmap.set(dataElement);
+                                byte[] bitmapPacked = pkgr.pack(f.fields, pkgr.length);
+                                packed = Utils.concat(packed, bitmapPacked);
+                                packed = f.getLengthPackager().pack(String.valueOf(bitmapPacked.length));
+
+                            }
+                            else {
+                                bitmap.set(dataElement);
+                                packed = Utils.concat(packed,
+                                        f.getLengthPackager().pack(String.valueOf((packedBytes.length))), packedBytes);
+                            }
+                        }
+                        else if (f.getDataPackager() != null && !(f.getDataPackager() instanceof BitmapPackager)) {
                             bitmap.set(dataElement);
-                            byte[] bitmapPacked = pkgr.pack(f.fields, pkgr.length);
-                            packed = Utils.concat(packed, bitmapPacked);
-                            packed = f.getLengthPackager().pack(String.valueOf(bitmapPacked.length));
+                            packed = Utils.concat(packed, f.getDataPackager().pack(f.getValue()));
 
                         }
-                        else {
-                            bitmap.set(dataElement);
-                            packed = Utils.concat(packed,
-                                    f.getLengthPackager().pack(String.valueOf((packedBytes.length))), packedBytes);
-                        }
                     }
-                    else if (f.getDataPackager() != null && !(f.getDataPackager() instanceof BitmapPackager)) {
-                        bitmap.set(dataElement);
-                        packed = Utils.concat(packed, f.getDataPackager().pack(f.getValue()));
+                    if (f.getDataPackager() instanceof BitmapPackager) {
+                        BitmapPackager pkgr = (BitmapPackager) f.getDataPackager();
+                        packed = Utils.concat(packed, pkgr.pack(f.fields, pkgr.length));
 
                     }
-                }
-                if (f.getDataPackager() instanceof BitmapPackager) {
-                    BitmapPackager pkgr = (BitmapPackager) f.getDataPackager();
-                    packed = Utils.concat(packed, pkgr.pack(f.fields, pkgr.length));
+
+                    dataElement++;
 
                 }
-
-                dataElement++;
-
-            }
-            catch (Exception ex) {
-                throw new Exception(String.format("Error at field %s having %s length packager and %s data packager.",
-                        f.getName(), f.getLengthPackager().describe(), f.getDataPackager().describe()), ex);
+                catch (Exception ex) {
+                    throw new Exception(
+                            String.format("Error at field %s having %s length packager and %s data packager.",
+                                    f.getName(), f.getLengthPackager().describe(), f.getDataPackager().describe()),
+                            ex);
+                }
             }
         }
 
-        byte[] p = Utils.toByteArray(bitmap);
-        byte[] q = new byte[bitmapSize];
-        for (int i = 0; i < bitmapSize; i++)
-            q[i] = p[i];
+        byte[] q = packBitmap(bitmapSize);
 
         packed = Utils.concat(q, packed);
 
         return packed;
 
+    }
+
+    protected byte[] packBitmap(int bitmapSize) {
+        byte[] p = Utils.toByteArray(bitmap);
+        byte[] q = new byte[bitmapSize];
+        for (int i = 0; i < bitmapSize; i++)
+            q[i] = p[i];
+        return q;
     }
 
     public boolean isMsbBitmapExtension() {
