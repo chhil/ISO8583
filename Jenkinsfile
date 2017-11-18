@@ -8,7 +8,7 @@ pipeline {
     }
     stage('Build') {
       steps {
-        bat(script: 'C:\\portableapps\\gradle-4.3.1\\bin\\gradle.bat', returnStatus: true)
+        bat(script: 'C:\\portableapps\\gradle-4.3.1\\bin\\gradle.bat  build', returnStatus: true)
       }
     }
     stage('Test') {
