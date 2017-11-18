@@ -11,5 +11,10 @@ pipeline {
         bat(script: 'C:\\portableapps\\gradle-4.3.1\\bin\\gradle.bat', returnStatus: true)
       }
     }
+    stage('Test') {
+      steps {
+        bat 'C:\\portableapps\\gradle-4.3.1\\bin\\gradle.bat test'
+      }
+    }
   }
 }
